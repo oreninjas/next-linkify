@@ -16,33 +16,21 @@ export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 
-    if (!email || !password) {
+    let db_user = await userModel.findOne({ email });
+
+    let result = await bcrypt.compare(password, db_user.password);
+    if (!result) {
       return NextResponse.json(
-        { error: "Email & Password are required." },
+        { error: "Something went wrong" },
         { status: 400 }
       );
     }
 
-    const userExist = await userModel.findOne({ email });
-    if (userExist) {
-      return NextResponse.json(
-        { error: "User already exists" },
-        { status: 400 }
-      );
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
-
-    let user = await userModel.create({
-      email,
-      password: hashedPassword,
-    });
-    let token = jwt.sign({ user_id: user._id }, JWT_AUTH_SECRET);
+    let token = jwt.sign({ db_user_id: db_user._id }, JWT_AUTH_SECRET);
 
     const response = NextResponse.json(
-      { message: "User has been created successfully." },
-      { status: 201 }
+      { message: "Success." },
+      { status: 200 }
     );
 
     response.cookies.set("auth_t", token, {
@@ -53,7 +41,7 @@ export async function POST(req: NextRequest) {
   } catch (error: unknown) {
     console.log(error);
     return NextResponse.json(
-      { error: "something went wrong" },
+      { error: "Something went wrong" },
       { status: 500 }
     );
   }

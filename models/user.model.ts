@@ -1,6 +1,11 @@
 import mongoose, { models, Schema } from "mongoose";
 
-const userSchema = new Schema(
+interface IUser {
+  email: string;
+  password: string;
+}
+
+const userSchema = new Schema<IUser>(
   {
     email: {
       type: String,

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Simple_Loading_Page from "@/components/Loading/Simple_Loading";
 
-const Register = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -15,11 +15,10 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      let response = await fetch("/api/auth/register", {
+      const response = await fetch("/api/auth/login", {
         body: JSON.stringify({ email, password }),
         method: "POST",
       });
-
       setIsLoading(true);
 
       if (!response.ok) {
@@ -42,9 +41,9 @@ const Register = () => {
     <div className="w-full h-screen flex items-center justify-center">
       <div className="shadow-lg p-10 sm:rounded-xl">
         <div>
-          <h2 className="font-bold">Create Your Account</h2>
+          <h2 className="font-bold">Log In to Continue</h2>
           <p className="font-light text-sm mt-1 text-balance">
-            Make it yours. Create your account and get started today
+            Welcome back. Let's pick up where you left off!
           </p>
         </div>
         <div className="w-full h-[1px] bg-zinc-300 my-5"></div>
@@ -78,4 +77,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
