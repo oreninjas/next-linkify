@@ -3,22 +3,12 @@ import Link from "next/link";
 const Home = () => {
   return (
     <>
-      <div className="w-full h-[90vh] flex justify-center items-center flex-col border-b border-zinc-800">
+      <div className="bg-grid w-full h-[90vh] flex justify-center items-center flex-col border-b border-zinc-800">
         <div className="flex text-4xl md:text-5xl items-center gap-5 font-light text-gray-800">
           <h1>Level Up Your</h1>
-          {/* <img
-            className="w-16 md:w-20 h-auto"
-            src="/images/knowledge.png"
-            alt="Knowledge png"
-          /> */}
           <h1>Learning</h1>
         </div>
         <div className="flex text-3xl items-center gap-5 font-light mt-8 text-gray-800">
-          {/* <img
-            className="w-24 md:w-32 lg:w-40 h-auto"
-            src="/images/percentages.svg"
-            alt="Percentages svg"
-          /> */}
           <h1>Simplify Your Flow</h1>
         </div>
         <p className="mt-6 text-sm md:text-base font-light text-gray-600">
@@ -67,9 +57,6 @@ const Home = () => {
 
       <div className="about-section w-full h-[50vh] flex items-center justify-center flex-col">
         <div className="flex items-center">
-          {/* <div className="p-3 bg-zinc-800 rounded-md">
-            <img className="w-8" src="/images/web_logo.png" alt="logo" />
-          </div> */}
           <h1 className="pl-10 font-semibold text-3xl md:text-5xl">About</h1>
         </div>
         <div className="full h-1/2 md:h-fit mt-10 flex items-center justify-center md:w-1/2 bg-blue-200 p-10 text-xl md:rounded-lg italic font-light">
@@ -80,7 +67,7 @@ const Home = () => {
               href="https://github.com/oreninjas"
               target="_blank"
             >
-              oreninjas
+              <span> oreninjas</span>
             </a>
             , a passionate developer dedicated to simplifying how people manage
             and share their links!

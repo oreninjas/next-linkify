@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectToDB from "@/lib/db.connection";
 import userModel from "@/models/user.model";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 connectToDB();
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let token = jwt.sign({ db_user_id: db_user._id }, JWT_AUTH_SECRET);
+    let token = jwt.sign({ user_id: db_user._id }, JWT_AUTH_SECRET);
 
     const response = NextResponse.json(
       { message: "Success." },
@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
 
     response.cookies.set("auth_t", token, {
       httpOnly: true,
+      secure: false,
     });
 
     return response;

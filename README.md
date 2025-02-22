@@ -3,3 +3,6 @@ This project is getting updates consistently, Also linkify project is a personal
 
 ### Design
 https://www.figma.com/design/1qBPrDvzlnrcPH1F6XFXBP/linkify-arch.
+
+### Todo
+- Complete navigation

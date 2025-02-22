@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectToDB from "@/lib/db.connection";
 import userModel from "@/models/user.model";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 connectToDB();
@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
 
     response.cookies.set("auth_t", token, {
       httpOnly: true,
+      secure: false,
     });
 
     return response;

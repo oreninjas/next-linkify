@@ -13,7 +13,10 @@ if (!cached) {
 }
 
 export default async function connectToDB() {
-  if (cached.conn) return cached.conn;
+  if (cached.conn) {
+    console.log("Connected to MongoDB");
+    cached.conn;
+  }
 
   if (!cached.promise) {
     mongoose.connect(MONGO_URI).then((res) => {
