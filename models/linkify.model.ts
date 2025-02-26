@@ -1,9 +1,9 @@
-import { model, Schema } from "mongoose";
+import { model, models, Schema } from "mongoose";
 
 interface Ilinkify {
   createdBy?: String;
   title?: String;
-  isPublished?: String;
+  isPublished?: Boolean;
 }
 
 const linkifySchema = new Schema<Ilinkify>({
@@ -21,5 +21,5 @@ const linkifySchema = new Schema<Ilinkify>({
   },
 });
 
-const linkify = model("linkify", linkifySchema);
+const linkify = models.linkify || model("linkify", linkifySchema);
 export default linkify;
