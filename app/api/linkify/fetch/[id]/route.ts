@@ -22,22 +22,3 @@ export async function GET(
     NextResponse.json({ error: "internal server error." }, { status: 500 });
   }
 }
-
-//     const linkify = await linkifyModel.findById(id);
-//     console.log(linkify);
-
-//     if (!linkify || linkify.isPublished === false) {
-//       return res.status(404).json({ message: 'linkify not found' });
-//     }
-
-//     const categories = await categoryModel.find({
-//       _id: { $in: linkify.categories },
-//     });
-
-//     res.status(200).json({ categories, isPublished: linkify.isPublished });
-//   } catch (error) {
-//     console.log(
-//       `error occured in fetch one linkify controller, ${error.message}`,
-//     );
-//     res.status(500).json({ error: 'internal server error' });
-//   }
