@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const authedRedirects = ["/register", "/login"];
-const protectedRoutes = ["/dashboard"];
+// const protectedRoutes = ["/dashboard"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("auth_t")?.value;
 
-  if (protectedRoutes.includes(pathname) && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  // if (protectedRoutes.includes(pathname) && !token) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
 
   if (authedRedirects.includes(pathname) && token) {
     return NextResponse.redirect(new URL("/dashboard", request.url));

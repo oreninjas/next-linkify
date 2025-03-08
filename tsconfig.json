@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/Home/Home.jsx", "components/Home/Swipe_Text.jsx", "components/Home/Swipe_Text.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/Home/Home.jsx", "components/Home/Swipe_Text.jsx", "components/Home/Swipe_Text.jsx", "app/api/auth/[...nextauth]"],
   "exclude": ["node_modules"]
 }
