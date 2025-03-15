@@ -2,14 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-grid {
+/* .bg-grid {
     background-color: #fff;
     background-image: linear-gradient(rgba(0, 0, 0, 0.1) 1px,
             transparent 1px),
         linear-gradient(90deg,
             rgba(0, 0, 0, 0.1) 1px,
-            /* box */
+            box
             transparent 1px);
     background-size: 15px 25px;
     height: 100vh;
-}
+} */

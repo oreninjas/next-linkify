@@ -22,10 +22,10 @@ const Login = () => {
       setIsLoading(true);
 
       if (!response.ok) {
+        setIsLoading(false);
         return router.refresh();
       }
 
-      setIsLoading(false);
       return router.push("/dashboard");
     } catch (error) {
       setIsLoading(false);

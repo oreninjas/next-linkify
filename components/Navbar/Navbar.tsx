@@ -9,7 +9,7 @@ const Navbar = () => {
   const [isHambergOn, setIsHambergOn] = useState(false);
 
   return (
-    <nav className="fixed w-screen my-3 md:px-56 px-8">
+    <nav className="fixed w-screen my-3 md:px-56 px-8 z-40">
       <div className="bg-white flex justify-between items-center w-full backdrop:blur-2xl px-8 h-[50px] rounded-lg outline outline-1 outline-gray-200">
         <div className="flex gap-7 items-center" role="button">
           <h2 className="text-xl text-[#737373] hover:text-[#0a0a0a] cursor-pointer transition-all transition-duration-500">

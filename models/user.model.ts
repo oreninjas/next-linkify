@@ -2,8 +2,10 @@ import mongoose, { Document, models, Schema, Model } from "mongoose";
 
 interface IUser extends Document {
   email?: string;
+  password?: string;
   name?: string;
   image?: string;
+  role?: string;
 }
 
 const userSchema = new Schema<IUser>(
@@ -12,12 +14,18 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+    password: {
+      type: String,
+    },
     name: {
       type: String,
-      required: true,
     },
     image: {
       type: String,
+    },
+    role: {
+      type: String,
+      default: "user",
     },
   },
   { timestamps: true }

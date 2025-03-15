@@ -17,8 +17,7 @@ const Register = () => {
     });
   };
   const { data: session } = useSession();
-  console.log(session?.user.id);
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -35,10 +34,11 @@ const Register = () => {
       setIsLoading(true);
 
       if (!response.ok) {
+        setIsLoading(false);
         return router.refresh();
       }
-
       setIsLoading(false);
+
       return router.push("/dashboard");
     } catch (error) {
       setIsLoading(false);
