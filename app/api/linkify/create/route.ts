@@ -1,38 +1,28 @@
-import connectToDB from "@/lib/db.connection";
-import decoder from "@/lib/decryptJWT";
-import linkifyModel from "@/models/linkify.model";
+import prisma from "@/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
-
-connectToDB();
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+
     const { title } = await request.json();
     if (!title) {
-      return NextResponse.json(
-        { message: "All fields are required" },
-        { status: 400 }
-      );
+      throw new Error("title is missing");
     }
 
-    const auth_token = request.cookies.get("auth_t")?.value;
-    if (!auth_token) {
-      return NextResponse.json({ message: "unauthorized" }, { status: 401 });
-    }
-    let userId = decoder(auth_token as string);
-
-    await linkifyModel.create({
-      createdBy: userId,
-      title,
+    const linkify = await prisma.linkify.create({
+      data: {
+        title: title,
+        createdBy: session?.user?.id,
+      },
     });
     return NextResponse.json(
       { message: "Linkify created successfully!" },
       { status: 201 }
     );
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: "internal server error" },
-      { status: 500 }
-    );
+  } catch (error) {
+    throw new Error("Something went wrong");
   }
 }

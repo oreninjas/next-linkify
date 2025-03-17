@@ -1,13 +1,12 @@
 "use client";
 import Card from "./Card";
-import { useRef } from "react";
+import Create_Button from "./Create_Button";
 
 const Dashboard = () => {
-  const ref = useRef<HTMLDivElement>(null);
-
   return (
-    <div ref={ref} className="w-full h-screen overflow-hidden">
-      <Card ref={ref} />
+    <div className="w-full h-screen overflow-hidden flex gap-10 p-10 flex-wrap">
+      <Card />
+      <Create_Button />
     </div>
   );
 };

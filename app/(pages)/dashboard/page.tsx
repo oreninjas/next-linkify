@@ -12,15 +12,15 @@ const DashboardPage = () => {
     return <div>Loading...</div>;
   }
 
-  return (
-    <>
-      <div className="w-full h-screen flex items-center justify-center">
-        {session?.user?.name}
-      </div>
-    </>
-  );
+  // return (
+  //   <>
+  //     <div className="w-full h-screen flex items-center justify-center">
+  //       {session?.user?.name}
+  //     </div>
+  //   </>
+  // );
 
-  // return <Dashboard />;
+  return <Dashboard />;
 };
 
 export default DashboardPage;
