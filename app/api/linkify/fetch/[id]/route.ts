@@ -1,9 +1,5 @@
-import connectToDB from "@/lib/db.connection";
-import linkifyModel from "@/models/linkify.model";
-import { link } from "fs";
 import { NextRequest, NextResponse } from "next/server";
-
-connectToDB();
+import prisma from "@/lib/prismadb";
 
 export async function GET(
   request: NextRequest,
@@ -12,12 +8,15 @@ export async function GET(
   try {
     const { id } = await params;
 
-    let response = await linkifyModel.findById(id);
-    if (response.isPublished == false) {
-      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    const linkify = await prisma.linkify.findUnique({
+      where: { id },
+    });
+
+    if (linkify?.isPublished === false) {
+      throw new Error("unauthorized access");
     }
 
-    return NextResponse.json({ response }, { status: 200 });
+    return NextResponse.json(linkify, { status: 200 });
   } catch (error) {
     NextResponse.json({ error: "internal server error." }, { status: 500 });
   }

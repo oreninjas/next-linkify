@@ -37,14 +37,20 @@ export const authOptions: AuthOptions = {
           throw new Error("No user found!");
         }
 
-        const isMatched = bcrypt.compare(
+        const isMatched = await bcrypt.compare(
           credentials.password,
           user.hashedPassword
         );
         if (!isMatched) {
           throw new Error("Something went wrong");
         }
-        return user;
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          emailVerified: user.emailVerified,
+          image: user.image,
+        };
       },
     }),
     GithubProvider({
@@ -56,6 +62,31 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET!,
     }),
   ],
+  callbacks: {
+    async jwt({ token, user, session }) {
+      console.log("jwt callback", { token, user, session });
+      // passes userId to token
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+        };
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      console.log("session callback", { session, token, user });
+      //  passes userId to session
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+        },
+      };
+      return session;
+    },
+  },
   pages: {
     signIn: "/login",
   },
