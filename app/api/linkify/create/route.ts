@@ -28,10 +28,7 @@ export async function POST(request: NextRequest) {
         createdBy: session.user.id,
       },
     });
-    return NextResponse.json(
-      { message: "Linkify created successfully!" },
-      { status: 201 }
-    );
+    return NextResponse.json(linkify, { status: 201 });
   } catch (error) {
     throw new Error("Something went wrong");
   }

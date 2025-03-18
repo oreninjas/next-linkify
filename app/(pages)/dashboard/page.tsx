@@ -20,7 +20,7 @@ const DashboardPage = () => {
   //   </>
   // );
 
-  return <Dashboard />;
+  return <Dashboard userId={session?.user.id || null} />;
 };
 
 export default DashboardPage;

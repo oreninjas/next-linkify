@@ -1,26 +1,45 @@
 "use client";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-useRouter;
-const Create_linkify = () => {
+
+interface CreateLinkifyProps {
+  data: any[];
+  setData: (newData: any[]) => void;
+}
+
+interface Linkify {
+  id: number;
+  title: string;
+  description?: string;
+}
+
+const Create_linkify = ({ data, setData }: CreateLinkifyProps) => {
   const [title, setTitle] = useState<string>("");
   const [isOff, setIsOff] = useState(false);
 
   const router = useRouter();
 
   const submitHandler = async (e: React.FormEvent) => {
-      e.preventDefault();
-      const response = await fetch("/api/linkify/create", {
-        method: "POST",
-        body: JSON.stringify({ title }),
-      })
-        .then(() => toast.success("Linkify created"))
-        .catch(() => toast.error("something went wrong"));
+    e.preventDefault();
+    try {
+      const res = await axios.post<{
+        id: number;
+        title: string;
+        description: string;
+      }>("/api/linkify/create", { title });
+      const newData = res.data;
+      setData([...data, newData]);
+      toast.success("Linkify created");
       setIsOff(true);
+    } catch (error) {
+      toast.error("something went wrong");
+      setIsOff(true);
+    }
   };
 
-  if (isOff === false) {
+  if (!isOff) {
     return (
       <div
         onClick={() => setIsOff(true)}

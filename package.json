@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -16,7 +16,6 @@
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "mongoose": "^8.10.1",
     "next": "15.1.7",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
