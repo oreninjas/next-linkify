@@ -2,6 +2,8 @@
 
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 import Simple_Loading_Page from "@/components/Loading/Simple_Loading";
 
 // Next Auth
@@ -12,37 +14,31 @@ const Register = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      let response = await fetch("/api/auth/register", {
-        body: JSON.stringify({ email, password }),
-        method: "POST",
-      });
-
-      setIsLoading(true);
-
-      if (!response.ok) {
-        setIsLoading(false);
-        return router.refresh();
-      }
-      setIsLoading(false);
-
-      return router.push("/dashboard");
-    } catch (error) {
-      setIsLoading(false);
-      return router.refresh();
+      const res = await axios.post("/api/auth/register", formData);
+      toast.success("Account created successfully!");
+      setFormData({ name: "", email: "", password: "" });
+      router.push("/dashboard");
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
-
-  if (isLoading) {
-    return <Simple_Loading_Page />;
-  }
 
   if (session) {
     redirect("/dashboard");
@@ -98,8 +94,8 @@ const Register = () => {
             type="email"
             name="email"
             placeholder="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            onChange={handleChange}
+            value={formData.email}
             required
           />
           <input
@@ -107,14 +103,14 @@ const Register = () => {
             type="password"
             name="password"
             placeholder="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            onChange={handleChange}
+            value={formData.password}
             required
           />
           <input
             className="bg-[#2f3037] text-white px-5 py-3 sm:rounded cursor-pointer"
             type="submit"
-            value="continue"
+            value={loading ? `signing up...` : "continue"}
           />
         </form>
       </div>

@@ -1,43 +1,51 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Simple_Loading_Page from "@/components/Loading/Simple_Loading";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  });
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter();
-
-  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSignIn = async (provider: "google" | "github") => {
+    toast.loading(`Redirecting to ${provider}...`);
 
     try {
-      const response = await fetch("/api/auth/login", {
-        body: JSON.stringify({ email, password }),
-        method: "POST",
-      });
-      setIsLoading(true);
-
-      if (!response.ok) {
-        setIsLoading(false);
-        return router.refresh();
-      }
-
-      return router.push("/dashboard");
+      await signIn(provider);
+      toast.dismiss();
+      toast.success(`Signed in with ${provider}!`);
     } catch (error) {
-      setIsLoading(false);
-      return router.refresh();
+      toast.dismiss();
+      toast.error(`Failed to sign in with ${provider}`);
     }
   };
 
-  if (isLoading) {
-    return <Simple_Loading_Page />;
-  }
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    signIn("credentials", {
+      email,
+      password,
+    }).then((cb) => {
+      if (cb?.error) {
+        toast.error(cb.error);
+      }
+
+      if (cb?.ok && !cb?.error) {
+        toast.success("Logged in successfully!");
+      }
+    });
+  };
 
   return (
     <div className="w-full h-screen flex items-center justify-center">
@@ -53,7 +61,7 @@ const Login = () => {
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => signIn("google")}
+            onClick={() => handleSignIn("google")}
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path
@@ -66,7 +74,7 @@ const Login = () => {
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => signIn("github")}
+            onClick={() => handleSignIn("github")}
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path

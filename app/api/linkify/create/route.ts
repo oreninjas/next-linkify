@@ -10,6 +10,13 @@ export async function POST(request: NextRequest) {
       throw new Error("unauthorized");
     }
 
+    const isUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+    if (!isUser) {
+      throw new Error("user not found");
+    }
+
     const { title } = await request.json();
     if (!title) {
       throw new Error("oops, title is missing");

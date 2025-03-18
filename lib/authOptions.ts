@@ -23,8 +23,8 @@ export const authOptions: AuthOptions = {
       async authorize(credentials) {
         if (
           !credentials?.email ||
-          !credentials.password ||
-          !credentials.username
+          !credentials.password
+          // !credentials.username
         ) {
           throw new Error("All fields are required!");
         }
@@ -64,7 +64,7 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, session }) {
-      console.log("jwt callback", { token, user, session });
+      // console.log("jwt callback", { token, user, session });
       // passes userId to token
       if (user) {
         return {
@@ -75,7 +75,7 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token, user }) {
-      console.log("session callback", { session, token, user });
+      // console.log("session callback", { session, token, user });
       //  passes userId to session
       return {
         ...session,

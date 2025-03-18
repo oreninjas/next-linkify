@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 useRouter;
 const Create_linkify = () => {
   const [title, setTitle] = useState<string>("");
@@ -9,20 +10,14 @@ const Create_linkify = () => {
   const router = useRouter();
 
   const submitHandler = async (e: React.FormEvent) => {
-    try {
       e.preventDefault();
       const response = await fetch("/api/linkify/create", {
         method: "POST",
         body: JSON.stringify({ title }),
-      });
-
-      if (!response.ok) {
-        return router.refresh();
-      }
+      })
+        .then(() => toast.success("Linkify created"))
+        .catch(() => toast.error("something went wrong"));
       setIsOff(true);
-    } catch (error) {
-      return router.refresh();
-    }
   };
 
   if (isOff === false) {

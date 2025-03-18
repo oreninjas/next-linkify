@@ -2,24 +2,24 @@ import prisma from "@/lib/prismadb";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
-const JWT_AUTH_SECRET = process.env.JWT_SECRET!;
-
 export async function POST(req: NextRequest) {
-  if (!JWT_AUTH_SECRET) {
-    throw new Error("Something went wrong");
-  }
-
   try {
     const { name, email, password } = await req.json();
     if (!email || !password) {
-      throw new Error("All fields are required");
+      return NextResponse.json(
+        { message: "All fields are required" },
+        { status: 400 }
+      );
     }
 
     const isExists = await prisma.user.findUnique({
       where: { email },
     });
     if (isExists) {
-      throw new Error("User already exists!");
+      return NextResponse.json(
+        { message: "User already exists!" },
+        { status: 409 }
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,12 +29,20 @@ export async function POST(req: NextRequest) {
         email,
         hashedPassword,
       },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+      },
     });
 
-    return NextResponse.json(user, { status: 201 });
+    return NextResponse.json({ user }, { status: 201 });
   } catch (error) {
     console.log(error);
-    throw new Error("There was an issue server-size, please try again");
-    return;
+    return NextResponse.json(
+      { message: "There was an issue server-side, please try again" },
+      { status: 500 }
+    );
   }
 }
