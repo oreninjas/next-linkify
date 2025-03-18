@@ -3,10 +3,10 @@ import prisma from "@/lib/prismadb";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const id = (await params).id;
 
     const linkify = await prisma.linkify.findUnique({
       where: { id },
@@ -18,6 +18,9 @@ export async function GET(
 
     return NextResponse.json(linkify, { status: 200 });
   } catch (error) {
-    NextResponse.json({ error: "internal server error." }, { status: 500 });
+    return NextResponse.json(
+      { error: "internal server error." },
+      { status: 500 }
+    );
   }
 }
