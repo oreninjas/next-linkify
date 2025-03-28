@@ -1,34 +1,33 @@
 "use client";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import { ArrowRight } from "lucide-react";
 
 const AllHomeSections = () => {
   return (
     <>
-      <div className="z-50" onClick={()=> console.log()}>
+      <div className="z-50" onClick={() => console.log()}>
         <section className="w-full h-[90vh] flex flex-col justify-center items-center">
-          <div className="flex flex-col items-center gap-5">
-            <div className="flex text-4xl md:text-5xl font-light text-gray-800">
-              <h1>Level Up Your</h1>
-              <h1>Learning</h1>
-            </div>
-            <div className="flex text-3xl items-center gap-5 font-light mt-8 text-gray-800">
-              <h1>Simplify Your Flow</h1>
-            </div>
-            <p className="mt-6 text-sm md:text-base font-light text-gray-600">
+          <div className="max-w-2xl mx-auto text-center space-y-8">
+            <h1 className="text-5xl md:text-6xl font-bold ">Linkify</h1>
+            <h2 className="text-2xl md:text-3xl font-light text-gray-600">
+              Simplify Your Flow
+            </h2>
+            <p className="text-lg text-gray-600">
               Organize and share your favorite links, all in one place.
             </p>
-            <Link
-              className="mt-10 font-light hover:font-normal hover:px-10 text-xl border border-green-500 px-8 py-5 rounded hover:bg-green-500 hover:text-white transition-all duration-350"
-              href="/register"
-              onClick={()=> console.log("clicked!")}
-            >
-              Get Started
-            </Link>
           </div>
+          <Button
+            variant={"outline"}
+            className="mt-8 rounded-lg px-8 py-6 text-lg font-medium transition duration-200 flex items-center gap-2"
+          >
+            <Link href={"/register"}>Get Started</Link>
+            <ArrowRight size={20} />
+          </Button>
         </section>
 
         {/* Features Section */}
-        <section className="w-full h-[60vh] flex flex-col items-center justify-center">
+        <section className="w-full h-[80vh] flex flex-col items-center justify-center">
           <div className="flex items-center mb-8">
             <h1 className="pl-10 font-light text-4xl text-gray-800">
               Features
