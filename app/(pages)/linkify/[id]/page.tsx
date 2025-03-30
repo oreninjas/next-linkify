@@ -8,6 +8,7 @@ import CategoryCard from "@/components/Linkify/CategoryCard";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddComponent from "@/components/Linkify/AddComponent";
+import { useRouter } from "next/navigation";
 
 type Params = {
   id: string;
@@ -26,6 +27,7 @@ export default function Linkify({ params }: { params: Promise<Params> }) {
 
   const unwrappedParams = React.use(params) as Params;
   const id = unwrappedParams.id;
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,13 +36,18 @@ export default function Linkify({ params }: { params: Promise<Params> }) {
         // This will fetch linkify
         const response = await axios.get(`/api/linkify/fetch/${id}`);
         setData(response.data);
+        if (response.status !== 200) {
+          router.replace("/404");
+          return;
+        }
         // This will fetch categories inside linkify
         const fetchCategories = await axios.get(
           `/api/linkify/categories/fetch/all/${id}`
         ); // only returns all id's and titles of categories inside linkify
         setCategories(fetchCategories.data || []);
       } catch (err) {
-        toast.error("Something went wrong getting linkify!");
+        toast.error("Something went wrong!");
+        router.replace("/404");
       } finally {
         setLoading(false);
       }
@@ -81,7 +88,11 @@ export default function Linkify({ params }: { params: Promise<Params> }) {
         )}
       </div>
       {isModelOpen && (
-        <AddComponent linkifyId={id} onClose={() => setIsModelOpen(false)} />
+        <AddComponent
+          setCategories={setCategories}
+          linkifyId={id}
+          onClose={() => setIsModelOpen(false)}
+        />
       )}
     </>
   );

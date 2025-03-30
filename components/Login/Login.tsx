@@ -36,6 +36,7 @@ const Login = () => {
     signIn("credentials", {
       email,
       password,
+      redirect: false,
     }).then((cb) => {
       if (cb?.error) {
         toast.error(cb.error);

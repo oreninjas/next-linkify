@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       where: { id: session.user.id },
     });
     if (!isUser) {
-      throw new Error("user not found");
+      return NextResponse.json("user not found", { status: 500 });
     }
 
     const { title } = await request.json();
@@ -30,6 +30,8 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json(linkify, { status: 201 });
   } catch (error) {
-    throw new Error("Something went wrong");
+    console.log(error);
+
+    return NextResponse.json("Something went wrong", { status: 500 });
   }
 }

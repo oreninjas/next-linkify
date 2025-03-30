@@ -18,21 +18,26 @@ interface ILinks {
 const CategoryCard = ({ linkifyId, title, categoryId }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [links, setLinks] = useState<ILinks[]>([]);
+  const [isFetched, setIsFetched] = useState(false);
 
   const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     toast.loading("hold a sec...");
-    try {
-      const response = await axios.get(
-        `/api/linkify/categories/link/fetch/${categoryId}`
-      );
-      setLinks(response.data);
-      console.log(response.data);
-      toast.remove();
-    } catch (error) {
-      toast.remove();
-      toast.error("something went wrong");
+    if (!isFetched) {
+      try {
+        const response = await axios.get(
+          `/api/linkify/categories/link/fetch/${categoryId}`
+        );
+        setLinks(response.data);
+        console.log(response.data);
+        toast.remove();
+        setIsFetched(true);
+      } catch (error) {
+        toast.remove();
+        toast.error("something went wrong");
+      }
     }
+    toast.remove();
   };
 
   return (
@@ -68,6 +73,7 @@ const CategoryCard = ({ linkifyId, title, categoryId }: Props) => {
           linkifyId={linkifyId}
           categoryId={categoryId}
           onClose={() => setIsModalOpen(false)}
+          setLinks={setLinks}
         />
       )}
     </>

@@ -11,8 +11,9 @@ export async function GET(
     const linkify = await prisma.linkify.findUnique({
       where: { id },
     });
-
-    if (linkify?.isPublished === false) {
+    if (!linkify) {
+      return NextResponse.json("linkify not found", { status: 404 });
+    } else if (linkify?.isPublished === false) {
       throw new Error("unauthorized access");
     }
 

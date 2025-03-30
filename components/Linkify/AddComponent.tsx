@@ -14,25 +14,38 @@ interface Props {
   linkifyId: string;
   onClose?: () => void;
   categoryId?: string;
+  setLinks?: React.Dispatch<React.SetStateAction<any[]>>;
+  setCategories?: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-const AddComponent = ({ linkifyId, onClose, categoryId }: Props) => {
-  const [type, setType] = useState<"link" | "category">("link");
+const AddComponent = ({
+  linkifyId,
+  onClose,
+  categoryId,
+  setLinks,
+  setCategories,
+}: Props) => {
+  const [type, setType] = useState<"link" | "category">("category");
   const [title, setTitle] = useState("");
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const response = axios.post(
-        `/api/linkify/${
-          type === "link"
-            ? `categories/link/create`
-            : `categories/create/${linkifyId}`
-        }`,
-        { title, categoryId }
+      const endpoint =
+        type === "link"
+          ? "/api/linkify/categories/link/create"
+          : `/api/linkify/categories/create/${linkifyId}`;
+      const response = await axios.post(endpoint, { title, categoryId });
+
+      if (type === "link" && setLinks) {
+        setLinks((prev) => [...prev, response.data]);
+      } else if (type === "category" && setCategories) {
+        setCategories((prev) => [...prev, response.data]);
+      }
+      toast.success(
+        `${type === "link" ? "Link" : "Category"} created successfully!`
       );
-      toast.success("link was created");
-      if (onClose) onClose();
+      if (onClose) onClose(); // closes the modal
     } catch (error) {
       if (onClose) onClose();
       toast.error("an error occured");
